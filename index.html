@@ -690,7 +690,7 @@
                         </div>
                     </form>
                     <h4 class='my-2 d-flex justify-content-center text-light'>
-                        Don't have an account?<a target='blank' href='#' id="signup">Sign Up</a>
+                        Don't have an account?<a  href='#' id="signup">Sign Up</a>
                     </h4>
                     <hr />
                     <div class='my-2 d-flex justify-content-center'>
@@ -780,7 +780,7 @@
                         </div>
                     </form>
                     <h6 class='my-2 d-flex justify-content-center text-light'>
-                        Already have an account?<a target='blank' href='#' id="login">Login</a>
+                        Already have an account?<a href='#' id="login">Login</a>
                     </h6>
                     <hr />
                     <div class='my-2 d-flex justify-content-center'>
@@ -2542,6 +2542,54 @@
             }
         })
 
+
+
+
+//google button signin for signup page
+document.getElementsByClassName('google-button')[1].addEventListener('click', async function (event) {
+            console.log('hi from google')
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            try {
+                const result = await firebase.auth().signInWithPopup(provider);
+                const credential = result.credential;
+                const token = credential.accessToken;
+                const user = result.user;
+                console.log(user)
+                // Handle successful sign-in here (e.g., display user info)
+                console.log(`Logged in user: ${user.displayName}`);
+                document.getElementsByClassName('login')[0].style.display = 'none'
+                document.getElementsByClassName('signup')[0].style.display = 'none'
+                document.getElementsByClassName('whole-container')[0].style.display = 'block'
+                let img_case = document.getElementsByClassName('disp-img')[0]
+                console.log(Object.keys(user))
+                if (firebase.auth().currentUser.photoURL !== null) {
+                    let img_el = document.createElement('img')
+                    img_el.classList.add('rnd-circle')
+                    img_el.src = firebase.auth().currentUser.photoURL
+                    console.log(img_el)
+                    img_case.appendChild(img_el)
+                }
+                else {
+                    let img_div = document.createElement('div')
+                    img_div.classList.add(['round_photo', 'text-light', 'text-center'])
+                    img_div.innerHTML = firebase.auth().currentUser.displayName[0].totoUpperCase()
+                    img_case.appendChild(img_div)
+
+                }
+                document.getElementsByClassName('disp-name')[0].innerHTML = firebase.auth().currentUser.displayName
+                document.getElementsByClassName('disp-email')[0].innerHTML = firebase.auth().currentUser.email
+
+
+
+            } catch (error) {
+                // Handle errors here
+                console.error("Error:", error.message);
+                // You can display an error message to the user
+            }
+        })
+
+ 
         document.getElementById('signup').addEventListener('click', function (event) {
             console.log('hi')
 
